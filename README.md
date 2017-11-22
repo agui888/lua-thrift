@@ -2,10 +2,17 @@
 
 LuaRocks packaging of [Apache Thrift](https://thrift.apache.org).
 
-## Changes
+## Installation
 
-This line within `src/Thrift.lua` has been disabled:
+```bash
+$ luarocks install thrift
+```
 
-```lua
-package.cpath = package.cpath .. ';bin/?.so' -- TODO FIX
+## Testing
+
+```
+$ luarocks install busted
+$ busted -v
+●●
+2 successes / 0 failures / 0 errors / 0 pending : 0.010238 seconds
 ```
