@@ -1,4 +1,4 @@
-local libluabpack = require 'thrift.libluabpack' 
+local libluabpack = require 'thrift.libluabpack'
 
 describe('libluabpack', function()
 

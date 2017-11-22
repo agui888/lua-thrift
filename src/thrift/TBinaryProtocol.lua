@@ -1,7 +1,10 @@
 local class = require 'middleclass'
 local libluabpack = require 'thrift.libluabpack'
 local libluabitwise = require 'thrift.libluabitwise'
+local terror = require 'thrift.terror'
 local TProtocol = require 'thrift.TProtocol'
+local TProtocolException = require 'thrift.TProtocolException'
+local TType = require 'thrift.TType'
 
 local TBinaryProtocol = class('TBinaryProtocol', TProtocol)
 
@@ -30,13 +33,13 @@ end
 function TBinaryProtocol:writeMessageEnd()
 end
 
-function TBinaryProtocol:writeStructBegin(name)
+function TBinaryProtocol:writeStructBegin()
 end
 
 function TBinaryProtocol:writeStructEnd()
 end
 
-function TBinaryProtocol:writeFieldBegin(name, ttype, id)
+function TBinaryProtocol:writeFieldBegin(_, ttype, id)
   self:writeByte(ttype)
   self:writeI16(id)
 end

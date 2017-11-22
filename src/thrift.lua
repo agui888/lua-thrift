@@ -1,5 +1,3 @@
-local thrift_print_r = require 'thrift.thrift_print_r'
-
 local M = {}
 
 -- consts

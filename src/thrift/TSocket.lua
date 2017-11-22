@@ -1,6 +1,8 @@
 local class = require 'middleclass'
 local luasocket = require 'socket'
+local terror = require 'thrift.terror'
 local TTransport = require 'thrift.TTransport'
+local TTransportException = require 'thrift.TTransportException'
 
 local TSocket = class('TSocket', TTransport)
 
@@ -27,7 +29,7 @@ function TSocket:getSocketInfo()
 end
 
 function TSocket:setTimeout(timeout)
-  if timeout and ttype(timeout) == 'number' then
+  if timeout and type(timeout) == 'number' then
     if self.handle then
       self.handle:settimeout(timeout)
     end

@@ -3,7 +3,9 @@ local libluabpack = require 'thrift.libluabpack'
 local libluabitwise = require 'thrift.libluabitwise'
 local liblualongnumber = require 'thrift.liblualongnumber'
 local TCompactType = require 'thrift.TCompactType'
+local terror = require 'thrift.terror'
 local TProtocol = require 'thrift.TProtocol'
+local TProtocolException = require 'thrift.TProtocolException'
 local TType = require 'thrift.TType'
 
 local TCompactProtocol = class('TCompactProtocol', TProtocol)
@@ -90,7 +92,7 @@ end
 function TCompactProtocol:writeMessageEnd()
 end
 
-function TCompactProtocol:writeStructBegin(name)
+function TCompactProtocol:writeStructBegin()
   self.lastFieldIndex = self.lastFieldIndex + 1
   self.lastField[self.lastFieldIndex] = self.lastFieldId
   self.lastFieldId = 0
@@ -191,7 +193,7 @@ function TCompactProtocol:writeBinary(str)
   self.trans:write(str)
 end
 
-function TCompactProtocol:writeFieldBeginInternal(name, ttype, id, typeOverride)
+function TCompactProtocol:writeFieldBeginInternal(_, ttype, id, typeOverride)
   if typeOverride == -1 then
     typeOverride = TTypeToCompactType[ttype]
   end
@@ -275,8 +277,8 @@ function TCompactProtocol:readFieldBegin()
     id = self.lastFieldId + modifier
   end
   if ttype == TType.BOOL then
-    boolValue = libluabitwise.band(field_and_ttype, 0x0f) == TCompactType.COMPACT_BOOLEAN_TRUE
-    boolValueIsNotNull = true
+    self.boolValue = libluabitwise.band(field_and_ttype, 0x0f) == TCompactType.COMPACT_BOOLEAN_TRUE
+    self.boolValueIsNotNull = true
   end
   self.lastFieldId = id
   return nil, ttype, id
@@ -323,9 +325,9 @@ function TCompactProtocol:readSetEnd()
 end
 
 function TCompactProtocol:readBool()
-  if boolValueIsNotNull then
-    boolValueIsNotNull = true
-    return boolValue
+  if self.boolValueIsNotNull then
+    self.boolValueIsNotNull = true
+    return self.boolValue
   end
   local val = self:readSignByte()
   if val == TCompactType.COMPACT_BOOLEAN_TRUE then
@@ -383,7 +385,7 @@ function TCompactProtocol:readVarint32()
   local shiftl = 0
   local result = 0
   while true do
-    b = self:readByte()
+    local b = self:readByte()
     result = libluabitwise.bor(result,
              libluabitwise.shiftl(libluabitwise.band(b, 0x7f), shiftl))
     if libluabitwise.band(b, 0x80) ~= 0x80 then
@@ -399,7 +401,8 @@ function TCompactProtocol:readVarint64()
   local data = result(0)
   local shiftl = 0
   while true do
-    b = self:readByte()
+    local b = self:readByte()
+    local endFlag
     endFlag, data = libluabpack.fromVarint64(b, shiftl, data)
     shiftl = shiftl + 7
     if endFlag == 0 then

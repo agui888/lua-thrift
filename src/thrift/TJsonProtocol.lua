@@ -1,7 +1,10 @@
 local class = require 'middleclass'
 local libluabitwise = require 'thrift.libluabitwise'
 local libluabpack = require 'thrift.libluabpack'
+local liblualongnumber = require 'thrift.liblualongnumber'
+local terror = require 'thrift.terror'
 local TProtocol = require 'thrift.TProtocol'
+local TProtocolException = require 'thrift.TProtocolException'
 local TType = require 'thrift.TType'
 
 local TJSONProtocol = class('', TProtocol)
@@ -76,9 +79,9 @@ local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 
 -- encoding
 local function base64_encode(data)
-    return ((data:gsub('.', function(x) 
-        local r,b='',x:byte()
-        for i=8,1,-1 do r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0') end
+    return ((data:gsub('.', function(x)
+        local r,b2='',x:byte()
+        for i=8,1,-1 do r=r..(b2%2^i-b2%2^(i-1)>0 and '1' or '0') end
         return r;
     end)..'0000'):gsub('%d%d%d?%d?%d?%d?', function(x)
         if (#x < 6) then return '' end
@@ -161,16 +164,16 @@ end
 
 function TJSONProtocol:writeJSONEscapeChar(ch)
   self.trans:write(JSONNode.EscapePrefix)
-  local outCh = hexChar(libluabitwise.shiftr(ch, 4))
+  local outCh = self:hexChar(libluabitwise.shiftr(ch, 4))
   local buff = libluabpack.bpack('c', outCh)
   self.trans:write(buff)
-  outCh = hexChar(ch)
+  outCh = self:hexChar(ch)
   buff = libluabpack.bpack('c', outCh)
   self.trans:write(buff)
 end
 
 function TJSONProtocol:writeJSONChar(byte)
-  ch = string.byte(byte)
+  local ch = string.byte(byte)
   if ch >= 0x30 then
     if ch == JSONNode.Backslash then
       self.trans:write(JSONNode.Backslash)
@@ -300,7 +303,7 @@ function TJSONProtocol:writeMessageEnd()
   self:writeJSONArrayEnd()
 end
 
-function TJSONProtocol:writeStructBegin(name)
+function TJSONProtocol:writeStructBegin()
   self:writeJSONObjectBegin()
 end
 
@@ -308,7 +311,7 @@ function TJSONProtocol:writeStructEnd()
   self:writeJSONObjectEnd()
 end
 
-function TJSONProtocol:writeFieldBegin(name, ttype, id)
+function TJSONProtocol:writeFieldBegin(_, ttype, id)
   self:writeJSONInteger(id)
   self:writeJSONObjectBegin()
   self:writeJSONString(TTypeToString[ttype])
@@ -444,7 +447,7 @@ function TJSONProtocol:hexVal(ch)
   end
 end
 
-function TJSONProtocol:readJSONEscapeChar(ch)
+function TJSONProtocol:readJSONEscapeChar()
   self:readJSONSyntaxChar(JSONNode.ZeroChar)
   self:readJSONSyntaxChar(JSONNode.ZeroChar)
   local b1 = self.trans:readAll(1)

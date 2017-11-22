@@ -1,5 +1,7 @@
 local class = require 'middleclass'
+local terror = require 'thrift.terror'
 local TTransport = require 'thrift.TTransport'
+local TTransportException = require 'thrift.TTransportException'
 
 local TMemoryBuffer = class('TMemoryBuffer', TTransport)
 

@@ -84,7 +84,7 @@ M.toVarint64 = function(num)
   return data
 end
 
-M.zigzagToI32 = function()
+M.zigzagToI32 = function(num)
   return bit32.bxor(bit32.arshift(num, 1), -bit32.band(num, 1))
 end
 

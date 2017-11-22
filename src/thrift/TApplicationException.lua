@@ -7,6 +7,7 @@ local TType = require 'thrift.TType'
 local TApplicationException = class('TApplicationException', TException)
 
 function TApplicationException:initialize(message, code)
+  TException.initialize(self, message)
   self.errorCode = code or 0
 end
 
@@ -25,25 +26,25 @@ function TApplicationException:__tostring()
 end
 
 function TApplicationException:__errorCodeToString()
-  if self.errorCode == TApplicationExceptionTypeUNKNOWN_METHOD then
+  if self.errorCode == TApplicationExceptionType.UNKNOWN_METHOD then
     return 'Unknown method'
-  elseif self.errorCode == TApplicationExceptionTypeINVALID_MESSAGE_TYPE then
+  elseif self.errorCode == TApplicationExceptionType.INVALID_MESSAGE_TYPE then
     return 'Invalid message type'
-  elseif self.errorCode == TApplicationExceptionTypeWRONG_METHOD_NAME then
+  elseif self.errorCode == TApplicationExceptionType.WRONG_METHOD_NAME then
     return 'Wrong method name'
-  elseif self.errorCode == TApplicationExceptionTypeBAD_SEQUENCE_ID then
+  elseif self.errorCode == TApplicationExceptionType.BAD_SEQUENCE_ID then
     return 'Bad sequence ID'
-  elseif self.errorCode == TApplicationExceptionTypeMISSING_RESULT then
+  elseif self.errorCode == TApplicationExceptionType.MISSING_RESULT then
     return 'Missing result'
-  elseif self.errorCode == TApplicationExceptionTypeINTERNAL_ERROR then
+  elseif self.errorCode == TApplicationExceptionType.INTERNAL_ERROR then
     return 'Internal error'
-  elseif self.errorCode == TApplicationExceptionTypePROTOCOL_ERROR then
+  elseif self.errorCode == TApplicationExceptionType.PROTOCOL_ERROR then
     return 'Protocol error'
-  elseif self.errorCode == TApplicationExceptionTypeINVALID_TRANSFORM then
+  elseif self.errorCode == TApplicationExceptionType.INVALID_TRANSFORM then
     return 'Invalid transform'
-  elseif self.errorCode == TApplicationExceptionTypeINVALID_PROTOCOL then
+  elseif self.errorCode == TApplicationExceptionType.INVALID_PROTOCOL then
     return 'Invalid protocol'
-  elseif self.errorCode == TApplicationExceptionTypeUNSUPPORTED_CLIENT_TYPE then
+  elseif self.errorCode == TApplicationExceptionType.UNSUPPORTED_CLIENT_TYPE then
     return 'Unsupported client type'
   else
     return 'Default (unknown)'
@@ -53,7 +54,7 @@ end
 function TApplicationException:read(iprot)
   iprot:readStructBegin()
   while true do
-    local fname, ftype, fid = iprot:readFieldBegin()
+    local _, ftype, fid = iprot:readFieldBegin()
     if ftype == TType.STOP then
       break
     elseif fid == 1 then

@@ -1,5 +1,6 @@
 local class = require 'middleclass'
 local TBinaryProtocolFactory = require 'thrift.TBinaryProtocolFactory'
+local terror = require 'thrift.terror'
 local TFramedTransportFactory = require 'thrift.TFramedTransportFactory'
 
 local TServer = class('TServer')
@@ -8,10 +9,10 @@ local TServer = class('TServer')
 --   1. {processor, serverTransport}
 --   2. {processor, serverTransport, transportFactory, protocolFactory}
 function TServer:initialize(processor, serverTransport, transportFactory, protocolFactory)
-  if args.processor == nil then
+  if processor == nil then
     terror('You must provide ' .. self.class .. ' with a processor')
   end
-  if args.serverTransport == nil then
+  if serverTransport == nil then
     terror('You must provide ' .. self.class .. ' with a serverTransport')
   end
 
@@ -46,7 +47,7 @@ function TServer:setServerEventHandler(handler)
   self.serverEventHandler = handler
 end
 
-function TServer:_clientBegin(content, iprot, oprot)
+function TServer:_clientBegin(_, iprot, oprot)
   if self.serverEventHandler and
     type(self.serverEventHandler.clientBegin) == 'function' then
     self.serverEventHandler:clientBegin(iprot, oprot)

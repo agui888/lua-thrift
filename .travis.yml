@@ -17,7 +17,6 @@ install:
   - if [[ "$LUA" == "lua=5.1"    ]]; then luarocks install bit32; fi
   - if [[ "$LUA" == "luajit=2.0" ]]; then luarocks install bit32; fi
   - if [[ "$LUA" == "luajit=2.1" ]]; then luarocks install bit32; fi
-  - luarocks install bin32
   - luarocks install busted
   - luarocks install luacheck
   - luarocks install luasocket
