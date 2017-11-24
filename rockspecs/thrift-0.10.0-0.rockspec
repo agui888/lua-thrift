@@ -15,6 +15,7 @@ description = {
 }
 dependencies = {
   "bit32 <= 5.3.0-1",
+  "long >= 1.0.0, < 2.0.0",
   "lua >= 5.1, <= 5.3",
   "luasocket <= 3.0rc1-2",
   "middleclass <= 4.1-0",

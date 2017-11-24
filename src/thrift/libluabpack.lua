@@ -42,7 +42,7 @@ M.bunpack = function(type, data)
   error('not impl yet', type, data)
 end
 
-M.fromVariant64 = function()
+M.fromVarint64 = function()
   error('not implemented yet')
 end
 
@@ -71,11 +71,11 @@ M.toVarint64 = function(num)
   local n = num
   
   while true do
-    if bit32.band(n, 127) == 0 then
+    if bit32.band(n, 0x7f) == 0 then
       data = data .. string.char(n)
       break
     else
-      data = data .. string.char(bit32.bor(bit32.band(n, 127), 128))
+      data = data .. string.char(bit32.bor(bit32.band(n, 0x7f), 0x80))
       n = bit32.rshift(n, 7)
     end
   end
