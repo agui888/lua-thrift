@@ -8,7 +8,6 @@ M.new = function(n)
   mt.__add = Long.add
   mt.__div = Long.divide
   mt.__eq = Long.eq
-  --TODO __gc
   mt.__lt = Long.lessThan
   --TODO __le
   --TODO __mod
