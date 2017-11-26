@@ -411,7 +411,7 @@ function TJSONProtocol:readJSONSyntaxChar(ch)
     ch2 = self.trans:readAll(1)
   end
   if ch2 ~= ch then
-    terror(TProtocolException:new{message = "Expected ".. ch .. ", got " .. ch2})
+    terror(TProtocolException:new("Expected ".. ch .. ", got " .. ch2))
   end
 end
 
@@ -443,7 +443,7 @@ function TJSONProtocol:hexVal(ch)
   elseif val >= 97 and val <= 102 then
     return val - 87
   else
-    terror(TProtocolException:new{message = "Expected hex val ([0-9a-f]); got " .. ch})
+    terror(TProtocolException:new("Expected hex val ([0-9a-f]); got " .. ch))
   end
 end
 
@@ -472,7 +472,7 @@ function TJSONProtocol:readJSONString()
       else
         local pos, _ = string.find(JSONNode.EscapeChars, ch)
         if pos == nil then
-          terror(TProtocolException:new{message = "Expected control char, got " .. ch})
+          terror(TProtocolException:new("Expected control char, got " .. ch))
         end
         ch = EscapeCharVals[pos]
       end
@@ -581,7 +581,7 @@ function TJSONProtocol:readMessageBegin()
   self:readJSONArrayBegin()
   local version = self:readJSONInteger()
   if version ~= self.THRIFT_JSON_PROTOCOL_VERSION then
-    terror(TProtocolException:new{message = "Message contained bad version."})
+    terror(TProtocolException:new("Message contained bad version."))
   end
   local name = self:readJSONString()
   local ttype = self:readJSONInteger()
@@ -668,7 +668,7 @@ end
 function TJSONProtocol:readByte()
   local result = self:readJSONInteger()
   if result >= 256 then
-    terror(TProtocolException:new{message = "UnExpected Byte " .. result})
+    terror(TProtocolException:new("UnExpected Byte " .. result))
   end
   return result
 end

@@ -8,7 +8,7 @@ local TBufferedTransportFactory = class('TBufferedTransportFactory', TTransportF
 
 function TBufferedTransportFactory:getTransport(trans)
   if not trans then
-    terror(TTransportException:new('Must supply a transport to ' .. self.class))
+    terror(TTransportException:new('Must supply a transport to ' .. self.class.name))
   end
   return TBufferedTransport:new(trans)
 end

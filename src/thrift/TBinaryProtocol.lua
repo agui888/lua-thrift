@@ -120,16 +120,14 @@ function TBinaryProtocol:readMessageBegin()
   if sz < 0 then
     local version = libluabitwise.band(sz, TBinaryProtocol.VERSION_MASK)
     if version ~= TBinaryProtocol.VERSION_1 then
-      terror(TProtocolException:new{
-        message = 'Bad version in readMessageBegin: ' .. sz
-      })
+      terror(TProtocolException:new('Bad version in readMessageBegin: ' .. sz))
     end
     ttype = libluabitwise.band(sz, TBinaryProtocol.TYPE_MASK)
     name = self:readString()
     seqid = self:readI32()
   else
     if self.strictRead then
-      terror(TProtocolException:new{message = 'No protocol version header'})
+      terror(TProtocolException:new('No protocol version header'))
     end
     name = self.trans:readAll(sz)
     ttype = self:readByte()

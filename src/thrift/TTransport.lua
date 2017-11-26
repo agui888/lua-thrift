@@ -17,9 +17,7 @@ function TTransport:readAll(len)
     buf = buf .. chunk
 
     if string.len(chunk) == 0 then
-      terror(TTransportException:new{
-        errorCode = TTransportException.END_OF_FILE
-      })
+      terror(TTransportException:new(nil, TTransportException.END_OF_FILE))
     end
   end
   return buf

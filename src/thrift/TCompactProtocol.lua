@@ -231,16 +231,16 @@ end
 function TCompactProtocol:readMessageBegin()
   local protocolId = self:readSignByte()
   if protocolId ~= self.COMPACT_PROTOCOL_ID then
-    terror(TProtocolException:new{
-      message = "Expected protocol id " .. self.COMPACT_PROTOCOL_ID .. " but got " .. protocolId})
+    terror(TProtocolException:new(
+      "Expected protocol id " .. self.COMPACT_PROTOCOL_ID .. " but got " .. protocolId))
   end
   local versionAndType = self:readSignByte()
   local version = libluabitwise.band(versionAndType, self.COMPACT_VERSION_MASK)
   local ttype = libluabitwise.band(libluabitwise.shiftr(versionAndType,
     self.COMPACT_TYPE_SHIFT_AMOUNT), self.COMPACT_TYPE_BITS)
   if version ~= self.COMPACT_VERSION then
-    terror(TProtocolException:new{
-      message = "Expected version " .. self.COMPACT_VERSION .. " but got " .. version})
+    terror(TProtocolException:new(
+      "Expected version " .. self.COMPACT_VERSION .. " but got " .. version))
   end
   local seqid = self:readVarint32()
   local name = self:readString()

@@ -8,7 +8,7 @@ local TFramedTransportFactory = class('TFramedTransportFactory', TTransportFacto
 
 function TFramedTransportFactory:getTransport(trans)
   if not trans then
-    terror(TProtocolException:new('Must supply a transport to ' .. self.class))
+    terror(TProtocolException:new('Must supply a transport to ' .. self.class.name))
   end
   return TFramedTransport:new(trans)
 end

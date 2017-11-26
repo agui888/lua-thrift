@@ -10,10 +10,10 @@ local TServer = class('TServer')
 --   2. {processor, serverTransport, transportFactory, protocolFactory}
 function TServer:initialize(processor, serverTransport, transportFactory, protocolFactory)
   if processor == nil then
-    terror('You must provide ' .. self.class .. ' with a processor')
+    terror('You must provide ' .. self.class.name .. ' with a processor')
   end
   if serverTransport == nil then
-    terror('You must provide ' .. self.class .. ' with a serverTransport')
+    terror('You must provide ' .. self.class.name .. ' with a serverTransport')
   end
 
   self.processor = processor
