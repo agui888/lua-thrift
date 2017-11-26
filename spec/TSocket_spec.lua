@@ -1,6 +1,6 @@
 local TSocket = require 'thrift.TSocket'
 
-describe('TMemoryBuffer', function()
+describe('TSocket', function()
 
   it('constructor', function()
     local socket = TSocket:new()
