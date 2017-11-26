@@ -8,7 +8,7 @@ local TJSONProtocolFactory = class('TJSONProtocolFactory')
 function TJSONProtocolFactory:getProtocol(trans)
   -- TODO Enforce that this must be a transport class (ie not a bool)
   if not trans then
-    terror(TProtocolException:new('Must supply a transport to ' .. self.class))
+    terror(TProtocolException:new('Must supply a transport to ' .. self.class.name))
   end
   return TJSONProtocol:new(trans)
 end

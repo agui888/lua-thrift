@@ -25,7 +25,7 @@ function TSocket:getSocketInfo()
   if self.handle then
     return self.handle:getsockinfo()
   end
-  terror(TTransportException:new{errorCode = TTransportException.NOT_OPEN})
+  terror(TTransportException:new(nil, TTransportException.NOT_OPEN))
 end
 
 function TSocket:setTimeout(timeout)
@@ -64,17 +64,15 @@ function TSocket:open()
   end
 
   if err then
-    terror(TTransportException:new{
-      message = 'Could not connect to ' .. self.host .. ':' .. self.port
-        .. ' (' .. err .. ')'
-    })
+    terror(TTransportException:new(
+      'Could not connect to ' .. self.host .. ':' .. self.port .. ' (' .. err .. ')'))
   end
 end
 
 function TSocket:read(len)
   local buf = self.handle:receive(self.handle, len)
   if not buf or string.len(buf) ~= len then
-    terror(TTransportException:new{errorCode = TTransportException.UNKNOWN})
+    terror(TTransportException:new(nil, TTransportException.UNKNOWN))
   end
   return buf
 end

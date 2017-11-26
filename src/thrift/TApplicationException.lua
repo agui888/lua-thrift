@@ -6,25 +6,6 @@ local TType = require 'thrift.TType'
 
 local TApplicationException = class('TApplicationException', TException)
 
-function TApplicationException:initialize(message, code)
-  TException.initialize(self, message)
-  self.errorCode = code or 0
-end
-
-function TApplicationException:__tostring()
-  if self.message then
-    return string.format('%s: %s', self.class, self.message)
-  else
-    local message
-    if self.errorCode and self.__errorCodeToString then
-      message = string.format('%d: %s', self.errorCode, self:__errorCodeToString())
-    else
-      message = thrift_print_r(self)
-    end
-    return string.format('%s:%s', self.__type, message)
-  end
-end
-
 function TApplicationException:__errorCodeToString()
   if self.errorCode == TApplicationExceptionType.UNKNOWN_METHOD then
     return 'Unknown method'
@@ -92,3 +73,5 @@ function TApplicationException:write(oprot)
   oprot:writeFieldStop()
   oprot:writeStructEnd()
 end
+
+return TApplicationException

@@ -8,7 +8,7 @@ local THttpTransportFactory = class('THttpTransportFactory', TTransportFactory)
 
 function THttpTransportFactory:getTransport(trans)
   if not trans then
-    terror(TProtocolException:new('Must supply a transport to ' .. self.class))
+    terror(TProtocolException:new('Must supply a transport to ' .. self.class.name))
   end
   return THttpTransport:new(trans)
 end

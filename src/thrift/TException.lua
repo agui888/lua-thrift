@@ -10,7 +10,7 @@ end
 
 function TException:__tostring()
   if self.message then
-    return string.format('%s: %s', self.class, self.message)
+    return string.format('%s: %s', self.class.name, self.message)
   else
     local message
     if self.errorCode and self.__errorCodeToString then
@@ -18,7 +18,7 @@ function TException:__tostring()
     else
       message = thrift_print_r(self)
     end
-    return string.format('%s:%s', self.__type, message)
+    return string.format('%s:%s', self.class.name, message)
   end
 end
 
