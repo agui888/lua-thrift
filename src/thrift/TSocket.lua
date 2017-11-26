@@ -37,13 +37,6 @@ function TSocket:setTimeout(timeout)
   end
 end
 
--- TSocket
-TSocket = TSocket:new{
-  __type = 'TSocket',
-  host = 'localhost',
-  port = 9090
-}
-
 function TSocket:isOpen()
   if self.handle then
     return true
