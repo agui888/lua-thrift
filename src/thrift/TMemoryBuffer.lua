@@ -6,6 +6,7 @@ local TTransportException = require 'thrift.TTransportException'
 local TMemoryBuffer = class('TMemoryBuffer', TTransport)
 
 function TMemoryBuffer:initialize()
+  TTransport.initialize(self)
   self.buffer = ''
   self.bufferSize = 1024
   self.wPos = 0
@@ -13,7 +14,7 @@ function TMemoryBuffer:initialize()
 end
 
 function TMemoryBuffer:isOpen()
-  return 1
+  return true
 end
 function TMemoryBuffer:open() end
 function TMemoryBuffer:close() end
