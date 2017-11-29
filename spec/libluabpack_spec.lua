@@ -2,6 +2,18 @@ local libluabpack = require 'thrift.libluabpack'
 
 describe('libluabpack', function()
 
+  it('bpack encodes signed bytes', function()
+    assert.equal('\000', libluabpack.bpack('c', 0))
+    assert.equal('\001', libluabpack.bpack('c', 1))
+    assert.equal('\127', libluabpack.bpack('c', 127))
+  end)
+  
+  it('bpack decodes signed bytes', function()
+    assert.equal(0, libluabpack.bunpack('c', '\000'))
+    assert.equal(1, libluabpack.bunpack('c', '\001'))
+    assert.equal(127, libluabpack.bunpack('c', '\127'))
+  end)
+  
   -- Expected values from https://developers.google.com/protocol-buffers/docs/encoding
   it('ZigZag encodes 32-bit signed integers', function()
     assert.equal(0, libluabpack.i32ToZigzag(0))

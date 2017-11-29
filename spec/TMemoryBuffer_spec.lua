@@ -1,3 +1,4 @@
+local TCompactProtocol = require 'thrift.TCompactProtocol'
 local TMemoryBuffer = require 'thrift.TMemoryBuffer'
 
 describe('TMemoryBuffer', function()
@@ -33,6 +34,13 @@ describe('TMemoryBuffer', function()
     
     assert.equal('', transport:read(1))
     assert.equal(0, transport:available())
+  end)
+  
+  it('double', function()
+    local transport = TMemoryBuffer:new(1000)
+    local proto = TCompactProtocol:new(transport)
+    proto:writeDouble(123.456)
+    assert.equal(123.456, proto:readDouble())
   end)
   
 end)
