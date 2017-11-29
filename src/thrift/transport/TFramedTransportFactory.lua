@@ -1,7 +1,7 @@
 local class = require 'middleclass'
 local terror = require 'thrift.terror'
 local TFramedTransport = require 'thrift.transport.TFramedTransport'
-local TProtocolException = require 'thrift.transport.TProtocolException'
+local TProtocolException = require 'thrift.protocol.TProtocolException'
 local TTransportFactory = require 'thrift.transport.TTransportFactory'
 
 local TFramedTransportFactory = class('TFramedTransportFactory', TTransportFactory)
