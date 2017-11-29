@@ -1,5 +1,5 @@
-local TCompactProtocol = require 'thrift.TCompactProtocol'
-local TMemoryBuffer = require 'thrift.TMemoryBuffer'
+local TCompactProtocol = require 'thrift.protocol.TCompactProtocol'
+local TMemoryBuffer = require 'thrift.transport.TMemoryBuffer'
 
 describe('TMemoryBuffer', function()
 

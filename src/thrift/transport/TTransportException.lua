@@ -1,6 +1,6 @@
 local class = require 'middleclass'
 local TException = require 'thrift.TException'
-local TTransportExceptionType = require 'thrift.TTransportExceptionType'
+local TTransportExceptionType = require 'thrift.transport.TTransportExceptionType'
 
 local TTransportException = class('TTransportException', TException)
 

@@ -1,8 +1,8 @@
 local class = require 'middleclass'
 local luasocket = require 'socket'
 local terror = require 'thrift.terror'
-local TTransport = require 'thrift.TTransport'
-local TTransportException = require 'thrift.TTransportException'
+local TTransport = require 'thrift.transport.TTransport'
+local TTransportException = require 'thrift.transport.TTransportException'
 
 local TSocket = class('TSocket', TTransport)
 

@@ -2,11 +2,11 @@ local class = require 'middleclass'
 local libluabpack = require 'thrift.libluabpack'
 local libluabitwise = require 'thrift.libluabitwise'
 local liblualongnumber = require 'thrift.liblualongnumber'
-local TCompactType = require 'thrift.TCompactType'
+local TCompactType = require 'thrift.protocol.TCompactProtocolType'
 local terror = require 'thrift.terror'
-local TProtocol = require 'thrift.TProtocol'
-local TProtocolException = require 'thrift.TProtocolException'
-local TType = require 'thrift.TType'
+local TProtocol = require 'thrift.protocol.TProtocol'
+local TProtocolException = require 'thrift.protocol.TProtocolException'
+local TType = require 'thrift.protocol.TType'
 
 local TCompactProtocol = class('TCompactProtocol', TProtocol)
 

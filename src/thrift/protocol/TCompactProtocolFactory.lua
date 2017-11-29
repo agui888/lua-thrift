@@ -1,7 +1,7 @@
 local class = require 'middleclass'
-local TCompactProtocol = require 'thrift.TCompactProtocol'
+local TCompactProtocol = require 'thrift.protocol.TCompactProtocol'
 local terror = require 'thrift.terror'
-local TProtocolException = require 'thrift.TProtocolException'
+local TProtocolException = require 'thrift.protocol.TProtocolException'
 
 local TCompactProtocolFactory = class('TCompactProtocolFactory')
 

@@ -1,5 +1,5 @@
 local class = require 'middleclass'
-local TTransport = require 'thrift.TTransport'
+local TTransport = require 'thrift.transport.TTransport'
 
 local TBufferedTransport = class('TBufferedTransport', TTransport)
 

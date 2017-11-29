@@ -1,5 +1,5 @@
-local TBufferedTransport = require 'thrift.TBufferedTransport'
-local TMemoryBuffer = require 'thrift.TMemoryBuffer'
+local TBufferedTransport = require 'thrift.transport.TBufferedTransport'
+local TMemoryBuffer = require 'thrift.transport.TMemoryBuffer'
 
 describe('TBufferedTransport', function()
 

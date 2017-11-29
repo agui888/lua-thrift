@@ -1,6 +1,6 @@
 local class = require 'middleclass'
 local terror = require 'thrift.terror'
-local TTransportException = require 'thrift.TTransportException'
+local TTransportException = require 'thrift.transport.TTransportException'
 
 local TTransport = class('TTransport')
 
