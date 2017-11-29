@@ -1,7 +1,7 @@
 local class = require 'middleclass'
-local TBinaryProtocolFactory = require 'thrift.TBinaryProtocolFactory'
 local terror = require 'thrift.terror'
-local TFramedTransportFactory = require 'thrift.TFramedTransportFactory'
+local TBinaryProtocolFactory = require 'thrift.protocol.TBinaryProtocolFactory'
+local TFramedTransportFactory = require 'thrift.transport.TFramedTransportFactory'
 
 local TServer = class('TServer')
 

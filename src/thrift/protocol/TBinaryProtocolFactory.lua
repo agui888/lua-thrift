@@ -1,8 +1,8 @@
 local class = require 'middleclass'
-local TBinaryProtocol = require 'thrift.TBinaryProtocol'
+local TBinaryProtocol = require 'thrift.protocol.TBinaryProtocol'
 local terror = require 'thrift.terror'
-local TProtocolException = require 'thrift.TProtocolException'
-local TProtocolFactory = require 'thrift.TProtocolFactory'
+local TProtocolException = require 'thrift.protocol.TProtocolException'
+local TProtocolFactory = require 'thrift.protocol.TProtocolFactory'
 
 local TBinaryProtocolFactory = class('TBinaryProtocolFactory', TProtocolFactory)
 

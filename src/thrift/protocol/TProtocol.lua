@@ -1,5 +1,5 @@
 local class = require 'middleclass'
-local TType = require 'thrift.TType'
+local TType = require 'thrift.protocol.TType'
 
 local TProtocol = class('TProtocol')
 

@@ -1,5 +1,5 @@
-local TTransportException = require 'thrift.TTransportException'
-local TTransportExceptionType = require 'thrift.TTransportExceptionType'
+local TTransportException = require 'thrift.transport.TTransportException'
+local TTransportExceptionType = require 'thrift.transport.TTransportExceptionType'
 
 describe('TTransportException', function()
 

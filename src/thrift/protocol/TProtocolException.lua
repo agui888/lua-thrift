@@ -1,6 +1,6 @@
 local class = require 'middleclass'
 local TException = require 'thrift.TException'
-local TProtocolExceptionType = require 'thrift.TProtocolExceptionType'
+local TProtocolExceptionType = require 'thrift.protocol.TProtocolExceptionType'
 
 local TProtocolException = class('TProtocolException', TException)
 

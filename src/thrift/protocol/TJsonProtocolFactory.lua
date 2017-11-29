@@ -1,7 +1,7 @@
 local class = require 'middleclass'
 local terror = require 'thrift.terror'
-local TJSONProtocol = require 'thrift.TJSONProtocol'
-local TProtocolException = require 'thrift.TProtocolException'
+local TJSONProtocol = require 'thrift.protocol.TJSONProtocol'
+local TProtocolException = require 'thrift.protocol.TProtocolException'
 
 local TJSONProtocolFactory = class('TJSONProtocolFactory')
 

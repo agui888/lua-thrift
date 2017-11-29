@@ -1,7 +1,7 @@
 local class = require 'middleclass'
 local luasocket = require 'socket'
 local terror = require 'thrift.terror'
-local TSocket = require 'thrift.TSocket'
+local TSocket = require 'thrift.transport.TSocket'
 
 local TServerSocket = class('TServerSocket', TSocket)
 

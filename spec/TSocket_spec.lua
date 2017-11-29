@@ -1,4 +1,4 @@
-local TSocket = require 'thrift.TSocket'
+local TSocket = require 'thrift.transport.TSocket'
 
 describe('TSocket', function()
 

@@ -1,7 +1,7 @@
 local class = require 'middleclass'
 local TApplicationExceptionType = require 'thrift.TApplicationExceptionType'
 local TException = require 'thrift.TException'
-local TType = require 'thrift.TType'
+local TType = require 'thrift.protocol.TType'
 
 local TApplicationException = class('TApplicationException', TException)
 

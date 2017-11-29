@@ -1,6 +1,6 @@
 local class = require 'middleclass'
 local libluabpack = require 'thrift.libluabpack'
-local TTransport = require 'thrift.TTransport'
+local TTransport = require 'thrift.transport.TTransport'
 
 local TFramedTransport = class('TFramedTransport', TTransport)
 

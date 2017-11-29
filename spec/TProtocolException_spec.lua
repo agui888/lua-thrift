@@ -1,5 +1,5 @@
-local TProtocolException = require 'thrift.TProtocolException'
-local TProtocolExceptionType = require 'thrift.TProtocolExceptionType'
+local TProtocolException = require 'thrift.protocol.TProtocolException'
+local TProtocolExceptionType = require 'thrift.protocol.TProtocolExceptionType'
 
 describe('TProtocolException', function()
 
