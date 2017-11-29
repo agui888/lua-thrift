@@ -4,8 +4,9 @@ local TTransport = require 'thrift.TTransport'
 
 local TFramedTransport = class('TFramedTransport', TTransport)
 
-function TFramedTransport:initialize()
+function TFramedTransport:initialize(trans)
   TTransport.initialize(self)
+  self.trans = trans
   self.doRead = true
   self.doWrite = true
   self.wBuf = ''

@@ -26,7 +26,7 @@ M.bpack = function(type, data)
   elseif type == 'd' then
     return vstruct.write('< f8', {data})
   end
-  error('unsupported type: '.. tostring(type))
+  error('unsupported type: '.. type)
 end
 
 --[[
@@ -39,7 +39,20 @@ end
  *  d - Double
 --]]
 M.bunpack = function(type, data)
-  error('not impl yet', type, data)
+  if type == 'c' then
+    return vstruct.read('< i1', data)[1]
+  elseif type == 'C' then
+    return vstruct.read('< u1', data)[1]
+  elseif type == 's' then
+    return vstruct.read('< i2', data)[1]
+  elseif type == 'i' then
+    return vstruct.read('< i4', data)[1]
+  elseif type == 'l' then
+    return vstruct.read('< i8', data)[1]
+  elseif type == 'd' then
+    return vstruct.read('< f8', data)[1]
+  end
+  error('unsupported type: '.. type)
 end
 
 M.fromVarint64 = function()

@@ -1,8 +1,8 @@
 package = "thrift"
-version = "0.10.0-1"
+version = "0.10.0-2"
 source = {
-  url = "https://github.com/BixData/lua-thrift/archive/0.10.0-1.tar.gz",
-  dir = "lua-thrift-0.10.0-1"
+  url = "https://github.com/BixData/lua-thrift/archive/0.10.0-2.tar.gz",
+  dir = "lua-thrift-0.10.0-2"
 }
 description = {
   summary = "LuaRocks packaging of Apache Thrift",
@@ -15,7 +15,7 @@ description = {
 }
 dependencies = {
   "bit32 <= 5.3.0-1",
-  "long >= 1.0.0, < 2.0.0",
+  "long >= 1.0.2, < 2.0.0",
   "lua >= 5.1, < 5.3",
   "luasocket <= 3.0rc1-2",
   "middleclass <= 4.1-0",

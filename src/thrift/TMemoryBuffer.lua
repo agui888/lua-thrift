@@ -5,10 +5,10 @@ local TTransportException = require 'thrift.TTransportException'
 
 local TMemoryBuffer = class('TMemoryBuffer', TTransport)
 
-function TMemoryBuffer:initialize()
+function TMemoryBuffer:initialize(size)
   TTransport.initialize(self)
   self.buffer = ''
-  self.bufferSize = 1024
+  self.bufferSize = size or 1024
   self.wPos = 0
   self.rPos = 0
 end
