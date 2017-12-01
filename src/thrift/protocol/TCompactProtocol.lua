@@ -1,11 +1,13 @@
+local bit32 = require 'bit32'
 local class = require 'middleclass'
 local libluabpack = require 'thrift.libluabpack'
 local libluabitwise = require 'thrift.libluabitwise'
-local liblualongnumber = require 'thrift.liblualongnumber'
 local TCompactType = require 'thrift.protocol.TCompactProtocolType'
 local terror = require 'thrift.terror'
+local Long = require 'long'
 local TProtocol = require 'thrift.protocol.TProtocol'
 local TProtocolException = require 'thrift.protocol.TProtocolException'
+local TProtocolExceptionType = require 'thrift.protocol.TProtocolExceptionType'
 local TType = require 'thrift.protocol.TType'
 
 local TCompactProtocol = class('TCompactProtocol', TProtocol)
@@ -38,34 +40,36 @@ function TCompactProtocol:initialize(trans)
   self.boolValueIsNotNull = false
 end
 
-local TTypeToCompactType = {}
-TTypeToCompactType[TType.STOP]   = TType.STOP
-TTypeToCompactType[TType.BOOL]   = TCompactType.COMPACT_BOOLEAN_TRUE
-TTypeToCompactType[TType.BYTE]   = TCompactType.COMPACT_BYTE
-TTypeToCompactType[TType.I16]    = TCompactType.COMPACT_I16
-TTypeToCompactType[TType.I32]    = TCompactType.COMPACT_I32
-TTypeToCompactType[TType.I64]    = TCompactType.COMPACT_I64
-TTypeToCompactType[TType.DOUBLE] = TCompactType.COMPACT_DOUBLE
-TTypeToCompactType[TType.STRING] = TCompactType.COMPACT_BINARY
-TTypeToCompactType[TType.LIST]   = TCompactType.COMPACT_LIST
-TTypeToCompactType[TType.SET]    = TCompactType.COMPACT_SET
-TTypeToCompactType[TType.MAP]    = TCompactType.COMPACT_MAP
-TTypeToCompactType[TType.STRUCT] = TCompactType.COMPACT_STRUCT
+local TTypeToCompactType = {
+  [TType.STOP]   = TType.STOP,
+  [TType.BOOL]   = TCompactType.COMPACT_BOOLEAN_TRUE,
+  [TType.BYTE]   = TCompactType.COMPACT_BYTE,
+  [TType.I16]    = TCompactType.COMPACT_I16,
+  [TType.I32]    = TCompactType.COMPACT_I32,
+  [TType.I64]    = TCompactType.COMPACT_I64,
+  [TType.DOUBLE] = TCompactType.COMPACT_DOUBLE,
+  [TType.STRING] = TCompactType.COMPACT_BINARY,
+  [TType.LIST]   = TCompactType.COMPACT_LIST,
+  [TType.SET]    = TCompactType.COMPACT_SET,
+  [TType.MAP]    = TCompactType.COMPACT_MAP,
+  [TType.STRUCT] = TCompactType.COMPACT_STRUCT
+}
 
-local CompactTypeToTType = {}
-CompactTypeToTType[TType.STOP]                        = TType.STOP
-CompactTypeToTType[TCompactType.COMPACT_BOOLEAN_TRUE] = TType.BOOL
-CompactTypeToTType[TCompactType.COMPACT_BOOLEAN_FALSE] = TType.BOOL
-CompactTypeToTType[TCompactType.COMPACT_BYTE]         = TType.BYTE
-CompactTypeToTType[TCompactType.COMPACT_I16]          = TType.I16
-CompactTypeToTType[TCompactType.COMPACT_I32]          = TType.I32
-CompactTypeToTType[TCompactType.COMPACT_I64]          = TType.I64
-CompactTypeToTType[TCompactType.COMPACT_DOUBLE]       = TType.DOUBLE
-CompactTypeToTType[TCompactType.COMPACT_BINARY]       = TType.STRING
-CompactTypeToTType[TCompactType.COMPACT_LIST]         = TType.LIST
-CompactTypeToTType[TCompactType.COMPACT_SET]          = TType.SET
-CompactTypeToTType[TCompactType.COMPACT_MAP]          = TType.MAP
-CompactTypeToTType[TCompactType.COMPACT_STRUCT]       = TType.STRUCT
+local CompactTypeToTType = {
+  [TType.STOP]                        = TType.STOP,
+  [TCompactType.COMPACT_BOOLEAN_TRUE] = TType.BOOL,
+  [TCompactType.COMPACT_BOOLEAN_FALSE]= TType.BOOL,
+  [TCompactType.COMPACT_BYTE]         = TType.BYTE,
+  [TCompactType.COMPACT_I16]          = TType.I16,
+  [TCompactType.COMPACT_I32]          = TType.I32,
+  [TCompactType.COMPACT_I64]          = TType.I64,
+  [TCompactType.COMPACT_DOUBLE]       = TType.DOUBLE,
+  [TCompactType.COMPACT_BINARY]       = TType.STRING,
+  [TCompactType.COMPACT_LIST]         = TType.LIST,
+  [TCompactType.COMPACT_SET]          = TType.SET,
+  [TCompactType.COMPACT_MAP]          = TType.MAP,
+  [TCompactType.COMPACT_STRUCT]       = TType.STRUCT
+}
 
 function TCompactProtocol:resetLastField()
   self.lastField = {}
@@ -81,7 +85,8 @@ function TCompactProtocol:writeMessageBegin(name, ttype, seqid)
   self:writeByte(TCompactProtocol.COMPACT_PROTOCOL_ID)
   self:writeByte(libluabpack.packMesgType(
     TCompactProtocol.COMPACT_VERSION,
-    TCompactProtocol.COMPACT_VERSION_MASK,ttype,
+    TCompactProtocol.COMPACT_VERSION_MASK,
+    ttype,
     TCompactProtocol.COMPACT_TYPE_SHIFT_AMOUNT,
     TCompactProtocol.COMPACT_TYPE_MASK))
   self:writeVarint32(seqid)
@@ -151,7 +156,6 @@ function TCompactProtocol:writeBool(bool)
   if bool then
     value = TCompactType.COMPACT_BOOLEAN_TRUE
   end
-  print(value,self.booleanFieldPending,self.booleanFieldId)
   if self.booleanFieldPending then
     self:writeFieldBeginInternal(self.booleanFieldName, TType.BOOL, self.booleanFieldId, value)
     self.booleanFieldPending = false
@@ -397,19 +401,25 @@ function TCompactProtocol:readVarint32()
 end
 
 function TCompactProtocol:readVarint64()
-  local result = liblualongnumber.new
-  local data = result(0)
-  local shiftl = 0
+  local rsize, lo, hi, shift = 0, 0, 0, 0
   while true do
     local b = self:readByte()
-    local endFlag
-    endFlag, data = libluabpack.fromVarint64(b, shiftl, data)
-    shiftl = shiftl + 7
-    if endFlag == 0 then
-      break
+    rsize = rsize + 1
+    if shift <= 25 then
+      lo = bit32.bor(lo, bit32.lshift(bit32.band(b, 0x7f), shift))
+    elseif 25 < shift and shift < 32 then
+        lo = bit32.bor(lo, bit32.lshift(bit32.band(b, 0x7f), shift))
+        hi = bit32.bor(hi, bit32.rshift(bit32.band(b, 0x7f), 32 - shift))
+    else
+        hi = bit32.bor(hi, bit32.lshift(bit32.band(b, 0x7f), shift - 32))
+    end
+    shift = shift + 7
+    if bit32.band(b, 0x80) then break end
+    if rsize >= 10 then
+      terror(TProtocolException:new("Variable-length int over 10 bytes", TProtocolExceptionType.INVALID_DATA))
     end
   end
-  return data
+  return Long.fromBits(lo, hi, true)
 end
 
 function TCompactProtocol:getTType(ctype)

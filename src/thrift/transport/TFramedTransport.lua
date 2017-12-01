@@ -15,7 +15,7 @@ end
 function TFramedTransport:close() end
 
 function TFramedTransport:ensureAvailable(len)
-  assert(self.readPos + len <= #self.inBuf, 'Input buffer underrun')
+  assert(self.readPos + len - 1 <= #self.inBuf, 'Input buffer underrun')
 end
 
 function TFramedTransport:isOpen()
@@ -26,10 +26,9 @@ function TFramedTransport:open() end
 
 function TFramedTransport:read(len)
   self:ensureAvailable(len)
-  local endInclusive = self.readPos + len - 1
-  assert(#self.inBuf >= endInclusive, 'read(' .. tostring(len) .. ') failed - not enough data')
-  local buf = string.sub(self.inBuf, self.readPos, endInclusive)
-  self.readPos = endInclusive + 1
+  local endInclusive = self.readPos + len
+  local buf = string.sub(self.inBuf, self.readPos, endInclusive - 1)
+  self.readPos = endInclusive
   return buf
 end
 
