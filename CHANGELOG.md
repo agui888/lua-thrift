@@ -1,4 +1,4 @@
-## [Unreleased]
+## [0.10.0-2] - 2017-12-01
 ### Added:
 - Implemented libluabpack `bunpack()`
 
