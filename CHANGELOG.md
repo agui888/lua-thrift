@@ -11,7 +11,7 @@
 - `TSocket.lua` did not export a class
 - `TFramedTransport` did not work; replaced with a port of NodeJS module, which sacrificed streaming while gaining a working implementation
 - `TCompactProtocol` could not read a signed byte due to use of wrong `bunpack()` type arg
-- `thrift_print_r` fails to print middleclass instances due to recursive loop
+- `print_r` stack overflow when attempting to print middleclass instances
 
 ## [0.10.0-1] - 2017-11-24
 ### Added:
