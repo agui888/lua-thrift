@@ -10,9 +10,9 @@ function TTransport:close() end
 function TTransport:read() end
 
 function TTransport:readAll(len)
-  local buf, have, chunk = '', 0
+  local buf, have = '', 0
   while have < len do
-    chunk = self:read(len - have)
+    local chunk = self:read(len - have)
     have = have + string.len(chunk)
     buf = buf .. chunk
 

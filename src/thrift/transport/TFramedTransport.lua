@@ -1,80 +1,84 @@
 local class = require 'middleclass'
-local libluabpack = require 'thrift.libluabpack'
 local TTransport = require 'thrift.transport.TTransport'
 
 local TFramedTransport = class('TFramedTransport', TTransport)
 
-function TFramedTransport:initialize(trans)
+function TFramedTransport:initialize(buffer, callback)
   TTransport.initialize(self)
-  self.trans = trans
-  self.doRead = true
-  self.doWrite = true
-  self.wBuf = ''
-  self.rBuf = ''
+  self.inBuf = buffer or ''
+  self.outBuffers = {}
+  self.outCount = 0
+  self.readPos = 1
+  self.onFlush = callback
+end
+
+function TFramedTransport:close() end
+
+function TFramedTransport:ensureAvailable(len)
+  assert(self.readPos + len <= #self.inBuf, 'Input buffer underrun')
 end
 
 function TFramedTransport:isOpen()
-  return self.trans:isOpen()
+  return true
 end
 
-function TFramedTransport:open()
-  return self.trans:open()
-end
-
-function TFramedTransport:close()
-  return self.trans:close()
-end
+function TFramedTransport:open() end
 
 function TFramedTransport:read(len)
-  if string.len(self.rBuf) == 0 then
-    self:__readFrame()
-  end
-
-  if self.doRead == false then
-    return self.trans:read(len)
-  end
-
-  if len > string.len(self.rBuf) then
-    local val = self.rBuf
-    self.rBuf = ''
-    return val
-  end
-
-  local val = string.sub(self.rBuf, 0, len)
-  self.rBuf = string.sub(self.rBuf, len+1)
-  return val
+  self:ensureAvailable(len)
+  local endInclusive = self.readPos + len - 1
+  assert(#self.inBuf >= endInclusive, 'read(' .. tostring(len) .. ') failed - not enough data')
+  local buf = string.sub(self.inBuf, self.readPos, endInclusive)
+  self.readPos = endInclusive + 1
+  return buf
 end
 
-function TFramedTransport:__readFrame()
-  local buf = self.trans:readAll(4)
-  local frame_len = libluabpack.bunpack('i', buf)
-  self.rBuf = self.trans:readAll(frame_len)
+--TFramedTransport.prototype.borrow = function() {
+--  return {
+--    buf: this.inBuf,
+--    readIndex: this.readPos,
+--    writeIndex: this.inBuf.length
+--  };
+--};
+
+function TFramedTransport:consume(bytesConsumed)
+  self.readPos = self.readPos + bytesConsumed
 end
 
-
-function TFramedTransport:write(buf, len)
-  if self.doWrite == false then
-    return self.trans:write(buf, len)
-  end
-
-  if len and len < string.len(buf) then
-    buf = string.sub(buf, 0, len)
-  end
-  self.wBuf = self.wBuf .. buf
-end
-
-function TFramedTransport:flush()
-  if self.doWrite == false then
-    return self.trans:flush()
-  end
-
-  -- If the write fails we still want wBuf to be clear
-  local tmp = self.wBuf
-  self.wBuf = ''
-  local frame_len_buf = libluabpack.bpack("i", string.len(tmp))
-  self.trans:write(frame_len_buf)
-  self.trans:write(tmp)
-  self.trans:flush()
-end
+--TFramedTransport.prototype.write = function(buf, encoding) {
+--  if (typeof(buf) === "string") {
+--    buf = new Buffer(buf, encoding || 'utf8');
+--  }
+--  this.outBuffers.push(buf);
+--  this.outCount += buf.length;
+--};
+--
+--TFramedTransport.prototype.flush = function() {
+--  // If the seqid of the callback is available pass it to the onFlush
+--  // Then remove the current seqid
+--  var seqid = this._seqid;
+--  this._seqid = null;
+--
+--  var out = new Buffer(this.outCount),
+--      pos = 0;
+--  this.outBuffers.forEach(function(buf) {
+--    buf.copy(out, pos, 0);
+--    pos += buf.length;
+--  });
+--
+--  if (this.onFlush) {
+--    // TODO: optimize this better, allocate one buffer instead of both:
+--    var msg = new Buffer(out.length + 4);
+--    binary.writeI32(msg, out.length);
+--    out.copy(msg, 4, 0, out.length);
+--    if (this.onFlush) {
+--      // Passing seqid through this call to get it to the connection
+--      this.onFlush(msg, seqid);
+--    }
+--  }
+--
+--  this.outBuffers = [];
+--  this.outCount = 0;
+--};
 
 return TFramedTransport
