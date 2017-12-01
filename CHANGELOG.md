@@ -9,6 +9,7 @@
 ### Fixed:
 - TBufferedTransport constructor was missing delegate arg
 - `TSocket.lua` did not export a class
+- `TFramedTransport` did not work; replaced with a port of NodeJS module, which sacrificed streaming while gaining a working implementation
 
 ## [0.10.0-1] - 2017-11-24
 ### Added:
