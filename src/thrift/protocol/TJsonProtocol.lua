@@ -9,8 +9,8 @@ local TType = require 'thrift.protocol.TType'
 
 local TJSONProtocol = class('', TProtocol)
 
-function TJSONProtocol:initialize()
-  TProtocol.initialize(self)
+function TJSONProtocol:initialize(trans)
+  TProtocol.initialize(self, trans)
   self.THRIFT_JSON_PROTOCOL_VERSION = 1
   self.jsonContext = {}
   self.jsonContextVal = {first = true, colon = true, ttype = 2, null = true}
