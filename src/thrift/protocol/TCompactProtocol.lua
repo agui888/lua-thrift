@@ -338,13 +338,13 @@ end
 
 function TCompactProtocol:readByte()
   local buff = self.trans:readAll(1)
-  local val = libluabpack.bunpack('c', buff)
+  local val = libluabpack.bunpack('C', buff)
   return val
 end
 
 function TCompactProtocol:readSignByte()
   local buff = self.trans:readAll(1)
-  local val = libluabpack.bunpack('C', buff)
+  local val = libluabpack.bunpack('c', buff)
   return val
 end
 

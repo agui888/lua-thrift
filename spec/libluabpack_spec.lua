@@ -12,6 +12,7 @@ describe('libluabpack', function()
     assert.equal(0, libluabpack.bunpack('c', '\000'))
     assert.equal(1, libluabpack.bunpack('c', '\001'))
     assert.equal(127, libluabpack.bunpack('c', '\127'))
+    assert.equal(-68, libluabpack.bunpack('c', string.char(0xbc)))
   end)
   
   -- Expected values from https://developers.google.com/protocol-buffers/docs/encoding
