@@ -30,11 +30,11 @@ build = {
     ["thrift.libluabpack"] = "src/thrift/libluabpack.lua",
     ["thrift.liblualongnumber"] = "src/thrift/liblualongnumber.lua",
     
+    ["thrift.print_r"] = "src/thrift/print_r.lua",
     ["thrift.TApplicationException"] = "src/thrift/TApplicationException.lua",
     ["thrift.TApplicationExceptionType"] = "src/thrift/TApplicationExceptionType.lua",
     ["thrift.terror"] = "src/thrift/terror.lua",
     ["thrift.TException"] = "src/thrift/TException.lua",
-    ["thrift.thrift_print_r"] = "src/thrift/thrift_print_r.lua",
     ["thrift.TServer"] = "src/thrift/TServer.lua",
     ["thrift.TSimpleServer"] = "src/thrift/TSimpleServer.lua",
     
