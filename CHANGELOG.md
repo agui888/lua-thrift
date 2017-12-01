@@ -7,9 +7,10 @@
 - Organize files into `protocol` and `transport` subfolders, adopting organization inspired by Thrift's Java support
 
 ### Fixed:
-- TBufferedTransport constructor was missing delegate arg
+- `TBufferedTransport` constructor was missing delegate arg
 - `TSocket.lua` did not export a class
 - `TFramedTransport` did not work; replaced with a port of NodeJS module, which sacrificed streaming while gaining a working implementation
+- `TCompactProtocol` could not read a signed byte due to use of wrong `bunpack()` type arg
 
 ## [0.10.0-1] - 2017-11-24
 ### Added:
