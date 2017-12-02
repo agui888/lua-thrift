@@ -403,18 +403,18 @@ end
 function TCompactProtocol:readVarint64()
   local rsize, lo, hi, shift = 0, 0, 0, 0
   while true do
-    local b = self:readByte()
+    local b = self:readSignByte()
     rsize = rsize + 1
     if shift <= 25 then
       lo = bit32.bor(lo, bit32.lshift(bit32.band(b, 0x7f), shift))
     elseif 25 < shift and shift < 32 then
-        lo = bit32.bor(lo, bit32.lshift(bit32.band(b, 0x7f), shift))
-        hi = bit32.bor(hi, bit32.rshift(bit32.band(b, 0x7f), 32 - shift))
+      lo = bit32.bor(lo, bit32.lshift(bit32.band(b, 0x7f), shift))
+      hi = bit32.bor(hi, bit32.rshift(bit32.band(b, 0x7f), 32 - shift))
     else
-        hi = bit32.bor(hi, bit32.lshift(bit32.band(b, 0x7f), shift - 32))
+      hi = bit32.bor(hi, bit32.lshift(bit32.band(b, 0x7f), shift - 32))
     end
     shift = shift + 7
-    if bit32.band(b, 0x80) then break end
+    if bit32.band(b, 0x80) == 0 then break end
     if rsize >= 10 then
       terror(TProtocolException:new("Variable-length int over 10 bytes", TProtocolExceptionType.INVALID_DATA))
     end

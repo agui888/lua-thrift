@@ -1,3 +1,7 @@
+## [Unreleased]
+### Fixed:
+- `TCompactProtocol` `readVarint64()` doesn't work with many numbers due to use of `readByte()` instead of `readSignByte()`
+
 ## [0.10.0-2] - 2017-12-01
 ### Added:
 - Implemented libluabpack `bunpack()`
