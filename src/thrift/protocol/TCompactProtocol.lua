@@ -363,7 +363,8 @@ function TCompactProtocol:readI32()
 end
 
 function TCompactProtocol:readI64()
-  local value = self:readVarint64()
+  local v = self:readVarint64()
+  local value = libluabpack.zigzagToI64(v)
   return value
 end
 

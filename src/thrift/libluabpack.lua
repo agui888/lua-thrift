@@ -1,4 +1,5 @@
 local bit32 = require 'bit32'
+local Long = require 'long'
 local vstruct = require 'vstruct'
 
 -- Contains excerpts from https://github.com/Neopallium/lua-pb/blob/master/pb/standard/zigzag.lua
@@ -101,8 +102,10 @@ M.zigzagToI32 = function(num)
   return bit32.bxor(bit32.arshift(num, 1), -bit32.band(num, 1))
 end
 
-M.zigzagToI64 = function()
-  error('not implemented yet')
+-- zigzagToI64 ported from Apache Thrift TCompactProtocol.java : return (n >>> 1) ^ -(n & 1);
+M.zigzagToI64 = function(n)
+  if not Long.isLong(n) then n = Long.fromValue(n) end
+  return n:shiftRight(1):bxor(n:band(1):negate())
 end
 
 return M

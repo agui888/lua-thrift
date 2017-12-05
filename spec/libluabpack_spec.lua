@@ -40,4 +40,13 @@ describe('libluabpack', function()
     assert.equal(4294967300, libluabpack.i64ToZigzag(2147483650))
   end)
   
+  it('ZigZag decodes 64-bit signed integers', function()
+    -- sanity check 32-bit values
+    assert.equal(0, libluabpack.zigzagToI64(0):toInt())
+    assert.equal(-1, libluabpack.zigzagToI64(1):toInt())
+    assert.equal(1, libluabpack.zigzagToI64(2):toInt())
+    assert.equal(-2, libluabpack.zigzagToI64(3):toInt())
+    assert.equal(2, libluabpack.zigzagToI64(4):toInt())
+  end)
+  
 end)
