@@ -1,4 +1,4 @@
-## [Unreleased]
+## [0.10.0-4] - 2017-12-05
 ### Fixed:
 - `TCompactProtocol` `readI64()` returns wrong results due to missing zigzag decoding
 
